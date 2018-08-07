@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 import { fetchData } from './data.js'
 import { Link } from "react-router-dom";
 
-
 class ListBox extends Component {
-
-    constructor(props) {
-        super(props);
-        this.pageNext = this.pageNext.bind(this);
+    constructor() {
+        super();
         this.setPage = this.setPage.bind(this);
         this.state = {
             indexList: [],//当前渲染的页面数据
@@ -17,67 +14,50 @@ class ListBox extends Component {
             goValue: 0,  //要去的条数index
             totalPage: 0,//总页数
         };
-
     }
-
     componentWillMount() {
-
         this.fetchListData()
-
-
     }
-
     setPage(num) {
         this.setState({
             indexList: this.state.totalData.slice(num, num + this.state.pageSize)
         })
     }
-
-
-    pageNext(num) {
-        this.setPage(num)
-    }
-    fetchListData = () => {
-        fetchData().then((res) => {
+    fetchListData(numlist=0){
+        fetchData(numlist).then((res) => {
+         
             const listData = res.data.map((item) => {
                 return {
-
                     title: item.title,
                     detail: item.id
                 }
-            })
-
+               
+            })  
             this.setState({
+             
                 totalData: listData
-            })
-
-            console.log(listData)
+            }) 
         }).then(() => {
             this.setState({
                 totalPage: Math.ceil(this.state.totalData.length / this.state.pageSize),
             })
-            this.pageNext(this.state.goValue)
+            this.setPage(this.state.goValue)
         })
     }
-
-
+    
+    
     render() {
         return (
             <div >
                 <ul >
                     {
-                        this.state.indexList.map(function (qq, index) {
-                            const { title, detail } ={...qq}
-                            console.log(detail)
-                            return (
-                                <li key={index}> <Link to={`/detail/${detail}`}>{title} </Link></li>
-                            
-                            )
-                        }
-                        )
+                        this.state.indexList.map((qq, index) => {
+                            const { title, detail } = { ...qq }
+                            return (<li key={index}> <Link to={`/detail/${detail}`}>{title} </Link></li>)
+                        })
                     }
                 </ul>
-                <PageButton {...this.state} pageNext={this.pageNext} />
+                <PageButton {...this.state} setPage={this.setPage} fetchListData={this.fetchListData.bind(this)}  />
             </div>
         );
     }
@@ -93,33 +73,39 @@ class PageButton extends Component {
             pagenum: this.props.current
         }
     }
+    setMore(){
 
+    }
     //下一页
     setNext() {
+
         if (this.state.pagenum < this.props.totalPage) {
             this.setState({
                 num: this.state.num + this.props.pageSize,
                 pagenum: this.state.pagenum + 1
-            }, function () {
-               
-                this.props.pageNext(this.state.num)
-            })
+            },
+                () => this.props.setPage(this.state.num)
+            )
+        }else{
+ 
+           ( this.props.fetchListData((this.props.totalPage)*(this.props.pageSize)))
         }
-    }
 
+    }
     //上一页
     setUp() {
+
         if (this.state.pagenum > 1) {
             this.setState({
                 num: this.state.num - this.props.pageSize,
                 pagenum: this.state.pagenum - 1
-            }, function () {
-               
-                this.props.pageNext(this.state.num)
-            })
-        }
-    }
+            },
 
+                () => this.props.setPage(this.state.num)
+            )
+        }
+
+    }
     render() {
         return (
             <div className="content-list-button" >

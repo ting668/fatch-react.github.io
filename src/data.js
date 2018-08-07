@@ -1,8 +1,8 @@
 
 
 
-export const fetchData = async () => 
-{ return fetch("https://cnodejs.org/api/v1/topics").then((res) => { return res.json() }) }
+export const fetchData = (numlist=10) =>
+{ numlist+=20 ;return fetch(`https://cnodejs.org/api/v1/topics?limit=${numlist}`).then((res) => { return res.json() }) }
 //const fetchRandomData2= async () => { return fetch("https://cnodejs.org/api/v1/topic").then((res) => { return res.json() }) }
 // class Data extends Component {
 
@@ -48,4 +48,4 @@ export const fetchData = async () =>
 
 // }
  
-export const getDetail = (detail = 1) => fetch(`https://cnodejs.org/api/v1/topic/${detail}`).then((res) => res.json()); 
+export const getDetail = (detail) => fetch(`https://cnodejs.org/api/v1/topic/${detail}`).then((res) => res.json()); 

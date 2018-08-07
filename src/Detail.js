@@ -9,7 +9,7 @@ class Detail extends Component {
     componentDidMount() {
         
         getDetail(this.props.match.params.detail).then((result) => {
-           console.log(result.data.content)
+    
             this.setState({
                 content: result.data.content
             })
@@ -17,9 +17,11 @@ class Detail extends Component {
     }
     render() {
         let { goBack } = this.props.history;
+      
         return(
             <div>
                 <button onClick={goBack}>后退</button>
+                
                 <div dangerouslySetInnerHTML={{ __html: this.state.content }}></div>
             </div>
         ) 

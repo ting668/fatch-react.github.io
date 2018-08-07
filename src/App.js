@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Redirect,Switch} from "react-router-dom";
+import { HashRouter, Redirect,Route, Switch } from "react-router-dom";
 import './App.css';
 import ListBox from "./ListBox"
 import Detail from './Detail'
@@ -30,9 +30,10 @@ class App extends Component {
           <HashRouter>
             <div>
               <Switch>
-                <Route path="/list" component={ListBox} ></Route>
+                <Route path="/list/:current" component={ListBox} ></Route>
                 <Route path="/detail/:detail" component={Detail} ></Route>
-                <Redirect from="/" to="/list" />
+              
+            <Redirect from="/" to="/list/1" /> 
               </Switch>
             </div>
           </HashRouter>
